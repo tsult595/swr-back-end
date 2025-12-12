@@ -30,3 +30,14 @@ export interface Favorite {
   heroId: number;
   addedAt: Date;
 }
+
+export interface Message {
+  id: number;
+  channel: 'global' | 'guild' | 'battle';
+  username: string;
+  userId: string;
+  text: string;
+  timestamp: string; 
+  type: 'normal' | 'system' | 'battle';
+}
+
