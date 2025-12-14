@@ -1,15 +1,11 @@
-import messageRepository from '../../data/repositories/MessageRepository';
+import * as messageRepository from '../../data/repositories/MessageRepository';
 import { Message } from '../../data/types';
 
-export class SendMessageUseCase {
-  async execute(messageData: Omit<Message, 'id' | 'timestamp'>): Promise<Message> {
-    const message: Omit<Message, 'id'> = {
-      ...messageData,
-      timestamp: new Date()
-    };
+export async function sendMessage(messageData: Omit<Message, 'id' | 'timestamp'>): Promise<Message> {
+  const message: Omit<Message, 'id'> = {
+    ...messageData,
+    timestamp: new Date().toISOString()
+  };
 
-    return await messageRepository.create(message);
-  }
+  return await messageRepository.createMessage(message);
 }
-
-export default new SendMessageUseCase();

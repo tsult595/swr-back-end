@@ -1,21 +1,20 @@
 import { Favorite } from '../types';
+import { WithId, Document } from 'mongodb';
 
-export class FavoriteModel {
-  static collectionName = 'favorites';
+export const FAVORITE_COLLECTION = 'favorites';
 
-  static fromDB(data: any): Favorite {
-    return {
-      userId: data.userId,
-      heroId: data.heroId,
-      addedAt: new Date(data.addedAt)
-    };
-  }
+export function favoriteFromDB(data: WithId<Document>): Favorite {
+  return {
+    userId: data.userId as string,
+    heroId: data.heroId as number,
+    addedAt: new Date(data.addedAt as string | Date)
+  };
+}
 
-  static toDB(favorite: Favorite): any {
-    return {
-      userId: favorite.userId,
-      heroId: favorite.heroId,
-      addedAt: favorite.addedAt
-    };
-  }
+export function favoriteToDB(favorite: Favorite): Document {
+  return {
+    userId: favorite.userId,
+    heroId: favorite.heroId,
+    addedAt: favorite.addedAt
+  };
 }

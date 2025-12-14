@@ -32,12 +32,12 @@ export interface Favorite {
 }
 
 export interface Message {
-  id: number;
+  id?: string;
   channel: 'global' | 'guild' | 'battle';
   username: string;
   userId: string;
   text: string;
-  timestamp: string; 
   type: 'normal' | 'system' | 'battle';
+  timestamp: string; 
 }
 

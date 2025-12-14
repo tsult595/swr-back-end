@@ -1,22 +1,20 @@
-import { Favorite, Hero } from '../types';
+import { Hero } from '../types';
+import { WithId, Document } from 'mongodb';
+export const HERO_COLLECTION = 'heroes';
 
-export class HeroModel {
-  static collectionName = 'heroes';
+export function heroFromDB(data: WithId<Document>): Hero {
+  return {
+    id: data.id,
+    name: data.name,
+    fileName: data.fileName,
+    rarity: data.rarity,
+    level: data.level,
+    price: data.price,
+    bid: data.bid,
+    status: data.status
+  };
+}
 
-  static fromDB(data: any): Hero {
-    return {
-      id: data.id,
-      name: data.name,
-      fileName: data.fileName,
-      rarity: data.rarity,
-      level: data.level,
-      price: data.price,
-      bid: data.bid,
-      status: data.status
-    };
-  }
-
-  static toDB(hero: Hero): any {
-    return { ...hero };
-  }
+export function heroToDB(hero: Hero): Document {
+  return { ...hero };
 }

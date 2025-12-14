@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import heroController from '../controllers/HeroController';
+import { getHeroes, getHeroById, getHeroHistory } from '../controllers/HeroController';
 
 const router = Router();
 
-router.get('/', heroController.getHeroes.bind(heroController));
-router.get('/:id/history', heroController.getHeroHistory.bind(heroController));
-router.get('/:id', heroController.getHeroById.bind(heroController));
+router.get('/', getHeroes);
+router.get('/:id/history', getHeroHistory);
+router.get('/:id', getHeroById);
 
 export default router;

@@ -1,13 +1,9 @@
-import heroRepository from '../../data/repositories/HeroRepository';
+import * as heroRepository from '../../data/repositories/HeroRepository';
 import { Hero } from '../../data/types';
 
-export class GetHeroesUseCase {
-  async execute(status?: string): Promise<Hero[]> {
-    if (status) {
-      return await heroRepository.findByStatus(status);
-    }
-    return await heroRepository.findAll();
+export async function getHeroes(status?: string): Promise<Hero[]> {
+  if (status) {
+    return await heroRepository.findHeroesByStatus(status);
   }
+  return await heroRepository.findAllHeroes();
 }
-
-export default new GetHeroesUseCase();

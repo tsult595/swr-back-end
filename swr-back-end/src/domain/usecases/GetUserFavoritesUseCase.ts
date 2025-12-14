@@ -1,9 +1,5 @@
-import favoriteRepository from '../../data/repositories/FavoriteRepository';
+import * as favoriteRepository from '../../data/repositories/FavoriteRepository';
 
-export class GetUserFavoritesUseCase {
-  async execute(userId: string) {
-    return await favoriteRepository.findByUserIdWithHeroes(userId);
-  }
+export async function getUserFavorites(userId: string) {
+  return await favoriteRepository.findFavoritesByUserIdWithHeroes(userId);
 }
-
-export default new GetUserFavoritesUseCase();
