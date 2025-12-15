@@ -41,3 +41,8 @@ export interface Message {
   timestamp: string; 
 }
 
+export interface UserType {
+  id: string;
+  createdAt: string;
+}
+

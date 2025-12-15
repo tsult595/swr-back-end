@@ -1,7 +1,7 @@
 import { getDB } from '../../config/database';
 import { FAVORITE_COLLECTION, favoriteFromDB, favoriteToDB } from '../models/Favorite';
 import { Favorite } from '../types';
-
+import { Hero } from '../types';
 export async function findFavoritesByUserId(userId: string): Promise<Favorite[]> {
   const db = getDB();
   const data = await db.collection(FAVORITE_COLLECTION).find({ userId }).toArray();

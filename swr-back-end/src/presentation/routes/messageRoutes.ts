@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import messageController from '../controllers/MessageController';
+import { getMessages, sendMessage } from '../controllers/MessageController';
 
 const router = Router();
 
-router.get('/:channel', messageController.getMessages.bind(messageController));
-router.post('/', messageController.sendMessage.bind(messageController));
+router.get('/:channel', getMessages);
+router.post('/', sendMessage);
 
 export default router;
