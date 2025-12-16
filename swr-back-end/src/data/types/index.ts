@@ -41,8 +41,11 @@ export interface Message {
   timestamp: string; 
 }
 
-export interface UserType {
+export type UserType = {
   id: string;
-  createdAt: string;
-}
+  nickname?: string;
+  companions?: string[];
+  createdAt?: string; 
+  
+};
 

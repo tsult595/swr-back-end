@@ -7,6 +7,8 @@ export function userFromDB(data: WithId<Document>): UserType {
   return {
     id: data.id,
     createdAt: data.createdAt,
+    nickname: data.nickname,
+    companions: data.companions,
   };
 }
 
