@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
-
-
 dotenv.config();
+
+import { sendMessage } from './domain/usecases/SendMessageUseCase';
 
 import express from 'express';
 import cors from 'cors';
@@ -10,6 +10,7 @@ import routes from './presentation/routes';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { Message } from './data/types';
+import { getMessages } from './domain/usecases/GetMessagesUseCase';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -40,29 +41,31 @@ const io = new SocketIOServer(server, {
   }
 });
 
+
+
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
+  socket.on('chat message', async (msg) => {
+    console.log('Получено сообщение от клиента:', msg);
+    try {
+      const savedMsg = await sendMessage(msg);
+      console.log('Сохранено в MongoDB:', savedMsg);
+      io.emit('chat message', savedMsg);
+    } catch (err) {
+      console.error('Ошибка при сохранении сообщения в MongoDB:', err);
+    }
   });
 
+  socket.on('get all messages', async () => {
+    const messages = await getMessages(100); 
+    socket.emit('all messages', messages);
+  });
+
+
+  
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
-  });
-});
-
-let chatMessages: Message[] = [];
-
-io.on('connection', (socket) => {
-
-  socket.on('get all messages', () => {
-    socket.emit('all messages', chatMessages);
-  });
-
-  socket.on('chat message', (msg) => {
-    chatMessages.push(msg);
-    io.emit('chat message', msg);
   });
 });
 

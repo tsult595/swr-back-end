@@ -1,3 +1,12 @@
+export async function findMessages(limit: number = 50): Promise<Message[]> {
+  const db = getDB();
+  const data = await db.collection(MESSAGE_COLLECTION)
+    .find({})
+    .sort({ timestamp: 1 })
+    .limit(limit)
+    .toArray();
+  return data.map(messageFromDB);
+}
 import { getDB } from '../../config/database';
 import { MESSAGE_COLLECTION, messageFromDB, messageToDB } from '../models/MessageModel';
 import { Message } from '../types';

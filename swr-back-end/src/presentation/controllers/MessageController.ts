@@ -4,10 +4,8 @@ import * as sendMessageUseCase from '../../domain/usecases/SendMessageUseCase';
 
 export async function getMessages(req: Request, res: Response) {
   try {
-    const channel = req.params.channel;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 50;
-
-    const messages = await getMessagesUseCase.getMessages(channel, limit);
+    const messages = await getMessagesUseCase.getMessages(limit);
     res.json(messages);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch messages' });
@@ -16,18 +14,16 @@ export async function getMessages(req: Request, res: Response) {
 
 export async function sendMessage(req: Request, res: Response) {
   try {
-    const { channel, username, userId, text, type } = req.body;
+    const { username, userId, text } = req.body;
 
-    if (!channel || !username || !userId || !text) {
+    if (!username || !userId || !text) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
     const message = await sendMessageUseCase.sendMessage({
-      channel,
       username,
       userId,
-      text,
-      type: type || 'user'
+      text
     });
 
     res.status(201).json(message);

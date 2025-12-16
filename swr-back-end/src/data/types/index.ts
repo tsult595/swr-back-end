@@ -33,11 +33,11 @@ export interface Favorite {
 
 export interface Message {
   id?: string;
-  channel: 'global' | 'guild' | 'battle';
+  // channel: 'global' | 'guild' | 'battle';
   username: string;
   userId: string;
   text: string;
-  type: 'normal' | 'system' | 'battle';
+  // type: 'normal' | 'system' | 'battle';
   timestamp: string; 
 }
 
