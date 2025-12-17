@@ -13,3 +13,9 @@ export async function createUser(user: UserType): Promise<UserType> {
   await db.collection(USER_COLLECTION).insertOne(userToDB(user));
   return user;
 }
+
+export async function findAllUsers(): Promise<UserType[]> {
+  const db = getDB();
+  const data = await db.collection(USER_COLLECTION).find({}).toArray();
+  return data.map(userFromDB);
+}

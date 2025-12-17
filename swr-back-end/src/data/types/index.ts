@@ -36,7 +36,7 @@ export interface Message {
   username: string;
   userId: string;
   text: string;
-  type: 'normal' | 'private';
+   type: 'normal' | 'private' | 'clanChat';
   recipientId?: string;
   timestamp: string;
 }
@@ -44,8 +44,8 @@ export interface Message {
 export type UserType = {
   id: string;
   nickname?: string;
+  clans?: string[]; 
   companions?: string[];
   createdAt?: string; 
-  
 };
 
