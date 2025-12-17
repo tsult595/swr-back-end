@@ -23,7 +23,8 @@ export async function sendMessage(req: Request, res: Response) {
     const message = await sendMessageUseCase.sendMessage({
       username,
       userId,
-      text
+      text,
+      type: 'normal'
     });
 
     res.status(201).json(message);
