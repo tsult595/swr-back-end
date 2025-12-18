@@ -3,9 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+import telegramNewsRoute from './telegramNewsRoute';
 
 var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
+
 var userRoutes = require('./routes/userRoutes');
 
 var app = express();
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api/users', userRoutes);
+app.use(telegramNewsRoute);
 
 
 
