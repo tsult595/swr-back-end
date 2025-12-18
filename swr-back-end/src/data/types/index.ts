@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 export interface Hero {
   id: number;
   name: string;
@@ -44,8 +46,16 @@ export interface Message {
 export type UserType = {
   id: string;
   nickname?: string;
-  clans?: string[]; 
+  clans: string[]; 
   companions?: string[];
   createdAt?: string; 
+};
+
+export type ClanDocument = {
+  id: string;
+  _id?: ObjectId; 
+  name: string;
+  members: string[];
+  ownerId: string;
 };
 

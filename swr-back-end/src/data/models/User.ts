@@ -9,6 +9,7 @@ export function userFromDB(data: WithId<Document>): UserType {
     createdAt: data.createdAt,
     nickname: data.nickname,
     companions: data.companions,
+    clans: Array.isArray(data.clans) ? data.clans : [],
   };
 }
 

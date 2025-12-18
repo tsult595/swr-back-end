@@ -10,6 +10,7 @@ export async function createUser(req: Request, res: Response) {
       createdAt: req.body.createdAt || new Date().toISOString(),
       nickname: req.body.nickname,
       companions: req.body.companions,
+      clans: req.body.clans || [],
     });
     res.status(201).json(user);
   } catch (error) {
