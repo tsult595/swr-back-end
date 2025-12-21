@@ -1,0 +1,211 @@
+// import dotenv from 'dotenv';
+// dotenv.config();
+
+// import { sendMessage } from './domain/usecases/SendMessageUseCase';
+
+// import express from 'express';
+// import cors from 'cors';
+// import { connectToDatabase } from './config/database';
+// import routes from './presentation/routes';
+// import http from 'http';
+// import { Server as SocketIOServer } from 'socket.io';
+// import { Message } from './data/types';
+// import { getMessages } from './domain/usecases/GetMessagesUseCase';
+
+// const app = express();
+// const PORT = process.env.PORT || 3001;
+
+// app.use(cors({
+//   origin: 'http://localhost:5173',
+//   credentials: true
+// }));
+
+// app.use(express.json());
+
+// app.get('/health', (req, res) => {
+//   res.json({ status: 'ok', database: process.env.DB_NAME || 'vinivici' });
+// });
+
+// app.use('/api', routes);
+
+
+// app.use((req, res) => {
+//   res.status(404).json({ error: 'Route not found' });
+// });
+
+// const server = http.createServer(app);
+// const io = new SocketIOServer(server, {
+//   cors: {
+//     origin: '*',
+//     methods: ['GET', 'POST']
+//   }
+// });
+
+
+
+// io.on('connection', (socket) => {
+//   console.log('User connected:', socket.id);
+
+//   // Подписка на клановые комнаты
+//   socket.on('join clans', (clanIds: string[]) => {
+//     if (Array.isArray(clanIds)) {
+//       clanIds.forEach(clanId => {
+//         if (clanId) socket.join(clanId);
+//       });
+//     }
+//   });
+
+//   socket.on('chat message', async (msg) => {
+//     console.log('Получено сообщение от клиента:', msg);
+//     try {
+//       const savedMsg = await sendMessage(msg);
+//       console.log('Сохранено в MongoDB:', savedMsg);
+//       if (savedMsg.type === 'clanChat' && savedMsg.recipientId) {
+//         io.to(savedMsg.recipientId).emit('chat message', savedMsg);
+//       } else {
+//         io.emit('chat message', savedMsg);
+//       }
+//     } catch (err) {
+//       console.error('Ошибка при сохранении сообщения в MongoDB:', err);
+//     }
+//   });
+
+// socket.on('get all messages', async () => {
+//   const allMessages = await getMessages(100);
+//   const userId = socket.handshake.auth.userId;
+//   const userClanIds = Array.from(socket.rooms).filter(r => r !== socket.id);
+
+//   const filtered = allMessages.filter(msg =>
+//     msg.type === 'normal' ||
+//     (msg.type === 'private' && (msg.userId === userId || msg.recipientId === userId)) ||
+//     (msg.type === 'clanChat' && msg.recipientId && userClanIds.includes(msg.recipientId))
+//   );
+//   socket.emit('all messages', filtered);
+// });
+
+
+  
+//   socket.on('disconnect', () => {
+//     console.log('User disconnected:', socket.id);
+//   });
+// });
+
+// connectToDatabase().then(() => {
+//   server.listen(PORT, () => {
+//     console.log(`🚀 Server and Socket.IO running: http://localhost:${PORT}`);
+//     console.log(`📡 Frontend: http://localhost:5173`);
+//   });
+// }).catch((error: Error) => {
+//   console.error('Failed to start server:', error);
+//   process.exit(1);
+// });
+
+
+
+
+
+// import dotenv from 'dotenv';
+// dotenv.config();
+
+// import { sendMessage } from './domain/usecases/SendMessageUseCase';
+
+// import express from 'express';
+// import cors from 'cors';
+// import { connectToDatabase } from './config/database';
+// import routes from './presentation/routes';
+// import http from 'http';
+// import { Server as SocketIOServer } from 'socket.io';
+// import { Message } from './data/types';
+// import { getMessages } from './domain/usecases/GetMessagesUseCase';
+
+// const app = express();
+// const PORT = process.env.PORT || 3001;
+
+// app.use(cors({
+//   origin: 'http://localhost:5173',
+//   credentials: true
+// }));
+
+// app.use(express.json());
+
+// app.get('/health', (req, res) => {
+//   res.json({ status: 'ok', database: process.env.DB_NAME || 'vinivici' });
+// });
+
+// app.use('/api', routes);
+
+
+// app.use((req, res) => {
+//   res.status(404).json({ error: 'Route not found' });
+// });
+
+// const server = http.createServer(app);
+// const io = new SocketIOServer(server, {
+//   cors: {
+//     origin: '*',
+//     methods: ['GET', 'POST']
+//   }
+// });
+
+
+
+
+
+
+
+// io.on('connection', (socket) => {
+//   console.log('User connected:', socket.id);
+
+//   // Подписка на клановые комнаты
+//   socket.on('join clans', (clanIds: string[]) => {
+//     if (Array.isArray(clanIds)) {
+//       clanIds.forEach(clanId => {
+//         if (clanId) socket.join(clanId);
+//       });
+//     }
+//   });
+
+//   socket.on('chat message', async (msg) => {
+//     console.log('Получено сообщение от клиента:', msg);
+//     try {
+//       const savedMsg = await sendMessage(msg);
+//       console.log('Сохранено в MongoDB:', savedMsg);
+//       if (savedMsg.type === 'clanChat' && savedMsg.recipientId) {
+//         io.to(savedMsg.recipientId).emit('chat message', savedMsg);
+//       } else {
+//         io.emit('chat message', savedMsg);
+//       }
+//     } catch (err) {
+//       console.error('Ошибка при сохранении сообщения в MongoDB:', err);
+//     }
+//   });
+
+// socket.on('get all messages', async () => {
+//   const allMessages = await getMessages(100);
+//   const userId = socket.handshake.auth.userId;
+//   const userClanIds = Array.from(socket.rooms).filter(r => r !== socket.id);
+
+//   const filtered = allMessages.filter(msg =>
+//     msg.type === 'normal' ||
+//     (msg.type === 'private' && (msg.userId === userId || msg.recipientId === userId)) ||
+//     (msg.type === 'clanChat' && msg.recipientId && userClanIds.includes(msg.recipientId))
+//   );
+//   socket.emit('all messages', filtered);
+// });
+
+
+  
+//   socket.on('disconnect', () => {
+//     console.log('User disconnected:', socket.id);
+//   });
+// });
+
+// connectToDatabase().then(() => {
+//   server.listen(PORT, () => {
+//     console.log(`🚀 Server and Socket.IO running: http://localhost:${PORT}`);
+//     console.log(`📡 Frontend: http://localhost:5173`);
+//   });
+// }).catch((error: Error) => {
+//   console.error('Failed to start server:', error);
+//   process.exit(1);
+// });
