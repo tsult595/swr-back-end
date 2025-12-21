@@ -76,3 +76,8 @@ export async function deleteClan(clanId: string): Promise<void> {
     { $pull: { clans: clanId } }
   );
 }
+
+export async function getAllClans() {
+  const db = getDB();
+  return db.collection('clans').find({}).toArray();
+}

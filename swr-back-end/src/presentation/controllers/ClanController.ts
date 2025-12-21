@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createClan , removeUserFromClan , deleteClan, getClansByUserId , addUserToClan } from '../../data/repositories/ClanRepository';
+import { createClan , removeUserFromClan , deleteClan, getClansByUserId , addUserToClan, getAllClans } from '../../data/repositories/ClanRepository';
 export async function addUserToClanController(req: Request, res: Response) {
   try {
     const { clanId } = req.params;
@@ -63,5 +63,14 @@ export async function deleteClanController(req: Request, res: Response) {
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete clan' });
+  }
+}
+
+export async function getAllClansController(req: Request, res: Response) {
+  try {
+    const clans = await getAllClans();
+    res.json(clans);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch all clans' });
   }
 }
