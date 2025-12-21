@@ -46,21 +46,45 @@ const io = new SocketIOServer(server, {
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
+  // Подписка на клановые комнаты
+  socket.on('join clans', (clanIds: string[]) => {
+    if (Array.isArray(clanIds)) {
+      clanIds.forEach(clanId => {
+        if (clanId) socket.join(clanId);
+      });
+    }
+  });
+
   socket.on('chat message', async (msg) => {
     console.log('Получено сообщение от клиента:', msg);
     try {
       const savedMsg = await sendMessage(msg);
       console.log('Сохранено в MongoDB:', savedMsg);
-      io.emit('chat message', savedMsg);
+      if (savedMsg.type === 'clanChat' && savedMsg.clanId) {
+        io.to(savedMsg.clanId).emit('chat message', savedMsg);
+      } else if (savedMsg.type === 'private' && savedMsg.recipientId) {
+        // For private messages, emit to recipient's room if joined, or handle differently
+        io.to(savedMsg.recipientId).emit('chat message', savedMsg);
+      } else {
+        io.emit('chat message', savedMsg);
+      }
     } catch (err) {
       console.error('Ошибка при сохранении сообщения в MongoDB:', err);
     }
   });
 
-  socket.on('get all messages', async () => {
-    const messages = await getMessages(100); 
-    socket.emit('all messages', messages);
-  });
+socket.on('get all messages', async () => {
+  const allMessages = await getMessages(100);
+  const userId = socket.handshake.auth.userId;
+  const userClanIds = Array.from(socket.rooms).filter(r => r !== socket.id);
+
+  const filtered = allMessages.filter(msg =>
+    msg.type === 'normal' ||
+    (msg.type === 'private' && (msg.userId === userId || msg.recipientId === userId)) ||
+    (msg.type === 'clanChat' && msg.clanId && userClanIds.includes(msg.clanId))
+  );
+  socket.emit('all messages', filtered);
+});
 
 
   

@@ -11,17 +11,17 @@ const io = new Server(server, {
   }
 });
 
-io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
+// io.on("connection", (socket) => {
+//   console.log("User connected:", socket.id);
 
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
-  });
+//   socket.on("chat message", (msg) => {
+//     io.emit("chat message", msg);
+//   });
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
-});
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected:", socket.id);
+//   });
+// });
 
 server.listen(PORT, () => {
   console.log(`Socket.IO server running on port ${PORT}`);
