@@ -43,8 +43,15 @@ const io = new SocketIOServer(server, {
 
 
 
+const userSockets = new Map();
+
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
+
+  socket.on('register', (userId) => {
+    userSockets.set(userId, socket.id);
+    console.log(`User ${userId} registered with socket ${socket.id}`);
+  });
 
   // Подписка на клановые комнаты
   socket.on('join clans', (clanIds: string[]) => {
@@ -63,8 +70,12 @@ io.on('connection', (socket) => {
       if (savedMsg.type === 'clanChat' && savedMsg.clanId) {
         io.to(savedMsg.clanId).emit('chat message', savedMsg);
       } else if (savedMsg.type === 'private' && savedMsg.recipientId) {
-        // For private messages, emit to recipient's room if joined, or handle differently
-        io.to(savedMsg.recipientId).emit('chat message', savedMsg);
+        const recipientSocketId = userSockets.get(savedMsg.recipientId);
+        if (recipientSocketId) {
+          io.to(recipientSocketId).emit('chat message', savedMsg);
+        } else {
+          console.log(`Recipient ${savedMsg.recipientId} not connected`);
+        }
       } else {
         io.emit('chat message', savedMsg);
       }
@@ -73,23 +84,28 @@ io.on('connection', (socket) => {
     }
   });
 
-socket.on('get all messages', async () => {
-  const allMessages = await getMessages(100);
-  const userId = socket.handshake.auth.userId;
-  const userClanIds = Array.from(socket.rooms).filter(r => r !== socket.id);
+  socket.on('get all messages', async () => {
+    const allMessages = await getMessages(100);
+    const userId = socket.handshake.auth.userId;
+    const userClanIds = Array.from(socket.rooms).filter(r => r !== socket.id);
 
-  const filtered = allMessages.filter(msg =>
-    msg.type === 'normal' ||
-    (msg.type === 'private' && (msg.userId === userId || msg.recipientId === userId)) ||
-    (msg.type === 'clanChat' && msg.clanId && userClanIds.includes(msg.clanId))
-  );
-  socket.emit('all messages', filtered);
-});
+    const filtered = allMessages.filter(msg =>
+      msg.type === 'normal' ||
+      (msg.type === 'private' && (msg.userId === userId || msg.recipientId === userId)) ||
+      (msg.type === 'clanChat' && msg.clanId && userClanIds.includes(msg.clanId))
+    );
+    socket.emit('all messages', filtered);
+  });
 
-
-  
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
+    // Remove from userSockets
+    for (let [userId, sockId] of userSockets) {
+      if (sockId === socket.id) {
+        userSockets.delete(userId);
+        break;
+      }
+    }
   });
 });
 
