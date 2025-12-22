@@ -28,12 +28,26 @@ export async function createMessage(message: Omit<Message, 'id'>): Promise<Messa
   return messageFromDB(newMessage!);
 }
 
-export async function deleteOldMessages(channel: string, daysToKeep: number = 7): Promise<void> {
+export async function findPrivateMessages(userId: string): Promise<Message[]> {
   const db = getDB();
-  const cutoffDate = new Date();
-  cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
-  await db.collection(MESSAGE_COLLECTION).deleteMany({
-    channel,
-    timestamp: { $lt: cutoffDate }
-  });
+  const data = await db.collection(MESSAGE_COLLECTION)
+    .find({
+      type: 'private',
+      $or: [{ userId }, { recipientId: userId }]
+    })
+    .sort({ timestamp: 1 })
+    .toArray();
+  return data.map(messageFromDB);
+}
+
+export async function findClanMessages(clanId: string): Promise<Message[]> {
+  const db = getDB();
+  const data = await db.collection(MESSAGE_COLLECTION)
+    .find({
+      type: 'clanChat',
+      recipientId: clanId
+    })
+    .sort({ timestamp: 1 })
+    .toArray();
+  return data.map(messageFromDB);
 }

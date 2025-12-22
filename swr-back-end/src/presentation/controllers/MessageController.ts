@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as getMessagesUseCase from '../../domain/usecases/GetMessagesUseCase';
 import * as sendMessageUseCase from '../../domain/usecases/SendMessageUseCase';
+import * as messageRepository from '../../data/repositories/MessageRepository';
 
 export async function getMessages(req: Request, res: Response) {
   try {
@@ -16,11 +17,8 @@ export async function getPrivateMessages(req: Request, res: Response) {
   try {
     const userId = req.query.userId as string;
     if (!userId) return res.status(400).json({ error: 'Missing userId' });
-    const messages = await getMessagesUseCase.getMessages(100);
-    const filtered = messages.filter(msg =>
-      msg.type === 'private' && (msg.userId === userId || msg.recipientId === userId)
-    );
-    res.json(filtered);
+    const messages = await messageRepository.findPrivateMessages(userId);
+    res.json(messages);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch private messages' });
   }
@@ -30,11 +28,8 @@ export async function getClanMessages(req: Request, res: Response) {
   try {
     const clanId = req.query.clanId as string;
     if (!clanId) return res.status(400).json({ error: 'Missing clanId' });
-    const messages = await getMessagesUseCase.getMessages(100);
-    const filtered = messages.filter(msg =>
-      msg.type === 'clanChat' && msg.recipientId === clanId
-    );
-    res.json(filtered);
+    const messages = await messageRepository.findClanMessages(clanId);
+    res.json(messages);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch clan messages' });
   }
