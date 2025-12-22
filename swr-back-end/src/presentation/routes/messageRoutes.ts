@@ -6,4 +6,5 @@ const router = Router();
 router.get('/:channel', getMessages);
 router.post('/', sendMessage);
 
+
 export default router;

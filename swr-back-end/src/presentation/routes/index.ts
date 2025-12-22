@@ -4,7 +4,7 @@ import favoriteRoutes from './favoriteRoutes';
 import messageRoutes from './messageRoutes';
 import userRoutes from './userRoutes'; 
 import clanRoutes from './clanRoutes';
-import telegramNewsRoute from './telegramNewsRoute';
+
 import { sendMessage, getPrivateMessages, getClanMessages } from '../controllers/MessageController';
 
 const router = Router();
@@ -17,6 +17,6 @@ router.use('/clans', clanRoutes);
 router.post('/send_message', sendMessage);
 router.get('/private-messages', getPrivateMessages);
 router.get('/clan-messages', getClanMessages);
-router.use(telegramNewsRoute);
+
 
 export default router;

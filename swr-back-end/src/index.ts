@@ -43,13 +43,28 @@ const io = new SocketIOServer(server, {
 
 
 
-const userSockets = new Map();
+const userSockets = new Map<string, string[]>(); // userId -> [socketIds]
 
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  socket.on('register', (userId) => {
-    userSockets.set(userId, socket.id);
+  // Регистрация пользователя
+  socket.on('register user', (userId: string) => {
+    if (!userSockets.has(userId)) {
+      userSockets.set(userId, []);
+    }
+    if (!userSockets.get(userId)!.includes(socket.id)) {
+      userSockets.get(userId)!.push(socket.id);
+    }
+  });
+
+  socket.on('register', (userId: string) => {
+    if (!userSockets.has(userId)) {
+      userSockets.set(userId, []);
+    }
+    if (!userSockets.get(userId)!.includes(socket.id)) {
+      userSockets.get(userId)!.push(socket.id);
+    }
     console.log(`User ${userId} registered with socket ${socket.id}`);
   });
 
@@ -70,9 +85,11 @@ io.on('connection', (socket) => {
       if (savedMsg.type === 'clanChat' && savedMsg.clanId) {
         io.to(savedMsg.clanId).emit('chat message', savedMsg);
       } else if (savedMsg.type === 'private' && savedMsg.recipientId) {
-        const recipientSocketId = userSockets.get(savedMsg.recipientId);
-        if (recipientSocketId) {
-          io.to(recipientSocketId).emit('chat message', savedMsg);
+        const recipientSockets = userSockets.get(savedMsg.recipientId);
+        if (recipientSockets && recipientSockets.length > 0) {
+          recipientSockets.forEach(socketId => {
+            io.to(socketId).emit('chat message', savedMsg);
+          });
         } else {
           console.log(`Recipient ${savedMsg.recipientId} not connected`);
         }
@@ -100,9 +117,13 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
     // Remove from userSockets
-    for (let [userId, sockId] of userSockets) {
-      if (sockId === socket.id) {
-        userSockets.delete(userId);
+    for (const [userId, sockets] of userSockets.entries()) {
+      const index = sockets.indexOf(socket.id);
+      if (index > -1) {
+        sockets.splice(index, 1);
+        if (sockets.length === 0) {
+          userSockets.delete(userId);
+        }
         break;
       }
     }
