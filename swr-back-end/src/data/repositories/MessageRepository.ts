@@ -7,6 +7,7 @@ export async function findMessages(limit: number = 50): Promise<Message[]> {
     .toArray();
   return data.map(messageFromDB);
 }
+import { ObjectId } from 'mongodb';
 import { getDB } from '../../config/database';
 import { MESSAGE_COLLECTION, messageFromDB, messageToDB } from '../models/MessageModel';
 import { Message } from '../types';
@@ -50,4 +51,10 @@ export async function findClanMessages(clanId: string): Promise<Message[]> {
     .sort({ timestamp: 1 })
     .toArray();
   return data.map(messageFromDB);
+}
+
+export async function deleteMessageById(messageId: string): Promise<boolean> {
+  const db = getDB();
+  const result = await db.collection(MESSAGE_COLLECTION).deleteOne({ id: messageId });
+  return result.deletedCount === 1;
 }
