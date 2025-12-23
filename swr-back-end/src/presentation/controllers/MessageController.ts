@@ -60,14 +60,23 @@ export async function sendMessage(req: Request, res: Response) {
 }
 
 export async function deleteMessage(req: Request, res: Response) {
+  console.log('Delete message called with id:', req.params.id);
   try {
     const { id } = req.params;
     if (!id) {
+      console.log('No id provided');
       return res.status(400).json({ error: 'Missing id' });
-    } 
-    await messageRepository.deleteMessageById(id);
-    res.json({ success: true });
+    }
+    const isDeleted = await messageRepository.deleteMessageById(id);
+    if (isDeleted) {
+      console.log('Message deleted successfully');
+      res.status(200).json({ message: 'Message deleted' });
+    } else {
+      console.log('Message not found');
+      res.status(404).json({ error: 'Message not found' });
+    }
   } catch (error) {
+    console.log('Error deleting message:', error);
     res.status(500).json({ error: 'Failed to delete message' });
   }
 }

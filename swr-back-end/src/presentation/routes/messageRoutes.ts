@@ -10,6 +10,4 @@ router.get('/private-messages', getPrivateMessages);
 router.get('/clan-messages', getClanMessages);
 router.delete('/:id', deleteMessage);
 
-
-
 export default router;

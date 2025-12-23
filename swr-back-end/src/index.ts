@@ -43,7 +43,7 @@ const io = new SocketIOServer(server, {
 
 
 
-const userSockets = new Map<string, string[]>(); // userId -> [socketIds]
+const userSockets = new Map<string, string[]>(); 
 
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
