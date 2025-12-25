@@ -77,7 +77,12 @@ export async function deleteClan(clanId: string): Promise<void> {
   );
 }
 
+export async function getClanById(clanId: string) {
+  const db = getDB();
+  return await db.collection('clans').findOne({ _id: new ObjectId(clanId) });
+}
+
 export async function getAllClans() {
   const db = getDB();
-  return db.collection('clans').find({}).toArray();
+  return await db.collection('clans').find({}).toArray();
 }

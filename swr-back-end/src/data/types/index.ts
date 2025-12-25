@@ -42,6 +42,7 @@ export interface Message {
   recipientId?: string;
   timestamp: string;
   clanId?: string;
+  clanName?: string; 
 }
 
 export type UserType = {

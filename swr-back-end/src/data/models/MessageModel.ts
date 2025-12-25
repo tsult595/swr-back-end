@@ -13,7 +13,9 @@ export function messageFromDB(data: WithId<Document>): Message {
     recipientId: data.recipientId || undefined,
     timestamp: data.timestamp instanceof Date
       ? data.timestamp.toISOString()
-      : new Date(data.timestamp).toISOString()
+      : new Date(data.timestamp).toISOString(),
+    clanId: data.clanId || undefined,
+    clanName: data.clanName || undefined
   };
 }
 
@@ -24,6 +26,8 @@ export function messageToDB(message: Omit<Message, 'id'>): Document {
     text: message.text,
     type: message.type || 'normal',
     recipientId: message.recipientId || null,
-    timestamp: new Date(message.timestamp)
+    timestamp: new Date(message.timestamp),
+    clanId: message.clanId || null,
+    clanName: message.clanName || null
   };
 }

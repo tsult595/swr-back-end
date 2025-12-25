@@ -4,13 +4,27 @@ import { getDB } from '../../config/database';
 import { MESSAGE_COLLECTION, messageFromDB, messageToDB } from '../models/MessageModel';
 import { Message } from '../types';
 
-export async function findMessages(limit: number = 50): Promise<Message[]> {
+export async function findAllMessages(limit?: number): Promise<Message[]> {
   const db = getDB();
-  const data = await db.collection(MESSAGE_COLLECTION)
+  let query = db.collection(MESSAGE_COLLECTION)
     .find({})
-    .sort({ timestamp: 1 })
-    .limit(limit)
-    .toArray();
+    .sort({ timestamp: 1 });
+  if (limit) {
+    query = query.limit(limit);
+  }
+  const data = await query.toArray();
+  return data.map(messageFromDB);
+}
+
+export async function findGlobalMessages(limit?: number): Promise<Message[]> {
+  const db = getDB();
+  let query = db.collection(MESSAGE_COLLECTION)
+    .find({ type: 'normal' })
+    .sort({ timestamp: 1 });
+  if (limit) {
+    query = query.limit(limit);
+  }
+  const data = await query.toArray();
   return data.map(messageFromDB);
 }
 

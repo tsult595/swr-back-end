@@ -78,7 +78,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chat message', async (msg) => {
-    console.log('Получено сообщение от клиента:', msg);
+    console.log('🔥 RECEIVED chat message:', msg);
     try {
       const savedMsg = await sendMessage(msg);
       console.log('Сохранено в MongoDB:', savedMsg);
@@ -139,3 +139,5 @@ connectToDatabase().then(() => {
   console.error('Failed to start server:', error);
   process.exit(1);
 });
+
+export { io, userSockets };
