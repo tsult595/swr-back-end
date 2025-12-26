@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { createUserIfNotExists } from '../../domain/usecases/UserUseCase';
+import { createUserIfNotExists, registerUser, verifyEmail } from '../../domain/usecases/UserUseCase';
+import { findAllUsers } from '../../data/repositories/UserRepository';
 
 export async function createUser(req: Request, res: Response) {
   try {
@@ -20,10 +21,33 @@ export async function createUser(req: Request, res: Response) {
 
 export async function getAllUsers(req: Request, res: Response) {
   try {
-    // Здесь предполагается, что у вас есть UserRepository с методом findAllUsers
-    const users = await import('../../data/repositories/UserRepository').then((m) => m.findAllUsers());
+    const users = await findAllUsers();
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch users' });
+  }
+}
+
+export async function register(req: Request, res: Response) {
+  try {
+    const { email } = req.body;
+    console.log('Register request:', { email });
+    if (!email) return res.status(400).json({ error: 'Email required' });
+    await registerUser(email);
+    res.json({ message: 'Verification email sent' });
+  } catch (error) {
+    console.log('Register error:', error);
+    res.status(400).json({ error: (error as Error).message });
+  }
+}
+
+export async function verify(req: Request, res: Response) {
+  try {
+    const { token } = req.query;
+    const user = await verifyEmail(token as string);
+    // Здесь можно сгенерировать JWT и вернуть
+    res.json({ user, message: 'Email verified' });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
   }
 }

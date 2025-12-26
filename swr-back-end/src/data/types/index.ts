@@ -50,7 +50,11 @@ export type UserType = {
   nickname?: string;
   clans: string[]; 
   companions?: string[];
-  createdAt?: string; 
+  createdAt?: string;
+  email?: string;
+  emailVerified?: boolean; 
+  verificationToken?: string;
+  tokenExpires?: Date;
 };
 
 export type ClanDocument = {
