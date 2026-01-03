@@ -2,18 +2,19 @@ import { getDB } from '../../config/database';
 import { FAVORITE_COLLECTION, favoriteFromDB, favoriteToDB } from '../models/Favorite';
 import { Favorite } from '../types';
 import { Hero } from '../types';
+import { heroFromDB } from '../models/Hero';
 export async function findFavoritesByUserId(userId: string): Promise<Favorite[]> {
   const db = getDB();
   const data = await db.collection(FAVORITE_COLLECTION).find({ userId }).toArray();
   return data.map(favoriteFromDB);
 }
 
-export async function findFavoritesByUserIdWithHeroes(userId: string): Promise<any[]> {
+export async function findFavoritesByUserIdWithHeroes(userId: string): Promise<Hero[]> {
   const db = getDB();
   const favorites = await db.collection(FAVORITE_COLLECTION).find({ userId }).toArray();
   const heroIds = favorites.map(f => f.heroId);
   const heroes = await db.collection('heroes').find({ id: { $in: heroIds } }).toArray();
-  return heroes;
+  return heroes.map(heroFromDB);
 }
 
 export async function addFavorite(favorite: Favorite): Promise<void> {

@@ -94,6 +94,7 @@ export async function deleteMessage(req: Request, res: Response) {
     const isDeleted = await messageRepository.deleteMessageById(id);
     if (isDeleted) {
       console.log('Message deleted successfully');
+      io.emit('message deleted', id);
       res.status(200).json({ message: 'Message deleted' });
     } else {
       console.log('Message not found');

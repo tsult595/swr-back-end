@@ -9,7 +9,7 @@ import { connectToDatabase } from './config/database';
 import routes from './presentation/routes';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import { Message } from './data/types';
+
 import { getMessages } from './domain/usecases/GetMessagesUseCase';
 
 const app = express();
