@@ -16,6 +16,13 @@ const heroes = [
   { id: 7, name: 'Goblin Rogue', fileName: 'charmander.jpg', rarity: 'High', level: 20, price: 120, bid: 50, status: 'Active' }
 ];
 
+const items = [
+  { id: 1, name: 'Sword of Truth', description: 'A legendary sword with immense power.', rarity: 'Legendary' },
+  { id: 2, name: 'Shield of Valor', description: 'An unbreakable shield that protects its bearer.', rarity: 'Epic' },
+  { id: 3, name: 'Staff of Wisdom', description: 'A magical staff that enhances the wielder\'s intellect.', rarity: 'Rare' },
+  { id: 4, name: 'Frontend Link', description: 'http://localhost:5173/', rarity: 'Common' }
+];
+
 const lotHistory = [
   { heroId: 1, id: 1, type: 'Created auction', from: '0x709...79C8', to: 'Auction', price: 300, date: '2025-12-01T05:31:00Z' },
   { heroId: 1, id: 2, type: 'Bid placed', from: '0x123...456A', to: 'Auction', price: 350, date: '2025-12-02T10:15:00Z' },
@@ -49,13 +56,16 @@ async function seedDatabase() {
     await db.collection('heroes').deleteMany({});
     await db.collection('lot_history').deleteMany({});
     await db.collection('favorites').deleteMany({});
+    await db.collection('items').deleteMany({});
     console.log('🗑️  Cleared old data');
     
     await db.collection('heroes').insertMany(heroes);
     await db.collection('lot_history').insertMany(lotHistory);
+    await db.collection('items').insertMany(items);
     
     console.log(`✅ Inserted ${heroes.length} heroes`);
     console.log(`✅ Inserted ${lotHistory.length} history records`);
+    console.log(`✅ Inserted ${items.length} items`);
     console.log('🎉 Database seeded successfully!');
     
   } catch (error) {

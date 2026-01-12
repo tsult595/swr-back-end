@@ -65,3 +65,10 @@ export type ClanDocument = {
   ownerId: string;
 };
 
+export type Item = {
+  id: number;
+  name: string;
+  description: string;
+  rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary';
+};
+
