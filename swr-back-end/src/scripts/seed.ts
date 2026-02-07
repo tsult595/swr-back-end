@@ -23,6 +23,17 @@ const items = [
   { id: 4, name: 'Frontend Link', description: 'http://localhost:5173/', rarity: 'Common' }
 ];
 
+const misteryBoxes = [
+  { id: 1, name: 'Common Mystery Box', description: 'A basic mystery box containing common items and heroes.', rarity: 'Common', price: 50, image: 'common-box.png' },
+  { id: 2, name: 'Rare Mystery Box', description: 'An uncommon mystery box with a chance for rare rewards.', rarity: 'Rare', price: 150, image: 'rare-box.png' },
+  { id: 3, name: 'Epic Mystery Box', description: 'A powerful mystery box containing epic treasures.', rarity: 'Epic', price: 300, image: 'epic-box.png' },
+  { id: 4, name: 'Legendary Mystery Box', description: 'The ultimate mystery box with legendary rewards.', rarity: 'Legendary', price: 500, image: 'legendary-box.png' },
+  { id: 5, name: 'Hero Mystery Box', description: 'A special box guaranteed to contain a hero.', rarity: 'Middle', price: 200, image: 'hero-box.png' },
+  { id: 6, name: 'Item Mystery Box', description: 'A box focused on powerful items and equipment.', rarity: 'Middle', price: 180, image: 'item-box.png' },
+  { id: 7, name: 'Starter Mystery Box', description: 'Perfect for beginners starting their adventure.', rarity: 'Common', price: 25, image: 'starter-box.png' },
+  { id: 8, name: 'Premium Mystery Box', description: 'A premium box with guaranteed high-value contents.', rarity: 'High', price: 400, image: 'premium-box.png' }
+];
+
 const lotHistory = [
   { heroId: 1, id: 1, type: 'Created auction', from: '0x709...79C8', to: 'Auction', price: 300, date: '2025-12-01T05:31:00Z' },
   { heroId: 1, id: 2, type: 'Bid placed', from: '0x123...456A', to: 'Auction', price: 350, date: '2025-12-02T10:15:00Z' },
@@ -57,15 +68,18 @@ async function seedDatabase() {
     await db.collection('lot_history').deleteMany({});
     await db.collection('favorites').deleteMany({});
     await db.collection('items').deleteMany({});
+    await db.collection('mystery_boxes').deleteMany({});
     console.log('🗑️  Cleared old data');
     
     await db.collection('heroes').insertMany(heroes);
     await db.collection('lot_history').insertMany(lotHistory);
     await db.collection('items').insertMany(items);
+    await db.collection('mystery_boxes').insertMany(misteryBoxes);
     
     console.log(`✅ Inserted ${heroes.length} heroes`);
     console.log(`✅ Inserted ${lotHistory.length} history records`);
     console.log(`✅ Inserted ${items.length} items`);
+    console.log(`✅ Inserted ${misteryBoxes.length} mystery boxes`);
     console.log('🎉 Database seeded successfully!');
     
   } catch (error) {

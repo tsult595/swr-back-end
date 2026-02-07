@@ -1,3 +1,7 @@
+import { getDB } from '../../config/database';
+import { Collection, ObjectId } from 'mongodb';
+import type { ClanDocument , UserType } from '../types';
+
 export async function addUserToClan(clanId: string, userId: string) {
   const db = getDB();
   const clansCollection: Collection<ClanDocument> = db.collection('clans');
@@ -17,9 +21,7 @@ export async function addUserToClan(clanId: string, userId: string) {
 
   return { success: true };
 }
-import { getDB } from '../../config/database';
-import { Collection, ObjectId } from 'mongodb';
-import type { ClanDocument , UserType } from '../types';
+
 
 export async function getClansByUserId(userId: string) {
   const db = getDB();

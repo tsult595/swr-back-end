@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import * as getHeroesUseCase from '../../domain/usecases/GetHeroesUseCase';
+import * as getAllHeroesUseCase from '../../domain/usecases/GetAllHeroesUseCase';
 import * as getHeroByIdUseCase from '../../domain/usecases/GetHeroByIdUseCase';
 
 export async function getHeroes(req: Request, res: Response) {
   try {
-    const status = req.query.status as string | undefined;
-    const heroes = await getHeroesUseCase.getHeroes(status);
+    const userId = req.query.userId as string | undefined;
+    const heroes = await getAllHeroesUseCase.getAllHeroesUseCase(userId);
     res.json(heroes);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch heroes' });

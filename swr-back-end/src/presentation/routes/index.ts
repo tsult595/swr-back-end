@@ -5,6 +5,7 @@ import messageRoutes from './messageRoutes';
 import userRoutes from './userRoutes'; 
 import clanRoutes from './clanRoutes';
 import itemRoutes from './itemRoutes';
+import mysteryBoxRoutes from './mysteryBoxesRoutes';
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.use('/messages', messageRoutes);
 router.use('/users', userRoutes); 
 router.use('/clans', clanRoutes);
 router.use('/items', itemRoutes);
+router.use('/mystery-boxes', mysteryBoxRoutes);
 
 
 export default router;

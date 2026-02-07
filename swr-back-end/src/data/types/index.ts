@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 
-export interface Hero {
+export interface Character {
   id: number;
   name: string;
   fileName: string;
@@ -15,6 +15,7 @@ export interface Hero {
   loses?: number;
   creator?: string;
   createDate?: string;
+  isLiked?: boolean;
 }
 
 export interface LotHistory {
@@ -67,8 +68,17 @@ export type ClanDocument = {
 
 export type Item = {
   id: number;
+  ownerId: string;
   name: string;
   description: string;
   rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary';
 };
 
+export type MysteryBox = {
+  id: number;
+  name: string;
+  description: string;
+  rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Middle' | 'High';
+  price: number;
+  image: string;
+};
