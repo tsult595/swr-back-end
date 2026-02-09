@@ -6,6 +6,7 @@ export const ITEM_COLLECTION = 'items';
 export function itemFromDB(data: WithId<Document>): Item {
   return {
     id: data.id,
+    ownerId: data.ownerId,
     name: data.name,
     description: data.description,
     rarity: data.rarity

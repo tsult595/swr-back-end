@@ -7,6 +7,7 @@ import { WithId, Document } from 'mongodb';
 export function mysteryBoxFromDB(data: WithId<Document>): MysteryBox {
   return {
     id: data.id,
+    ownerId: data.ownerId,
     name: data.name,
     description: data.description,
     rarity: data.rarity,

@@ -19,3 +19,22 @@ export async function findItemsByRarity(rarity: string): Promise<Item[]> {
   const data = await db.collection(ITEM_COLLECTION).find({ rarity }).toArray();
   return data.map(itemFromDB);
 }
+
+export async function buyItem(userId: string, itemId: number): Promise<void> {
+  const db = getDB();
+  await db.collection(ITEM_COLLECTION).updateOne(
+    { id: itemId },
+    { $set: { ownerId: userId } }
+  );
+}
+
+export async function findItemsByOwnerId(ownerId: string): Promise<Item[]> {
+  const db = getDB();
+  const data = await db.collection(ITEM_COLLECTION).find({ ownerId }).toArray();
+  return data.map(itemFromDB);
+}
+
+export async function deleteItem(itemId: number, userId: string): Promise<void> {
+  const db = getDB();
+  await db.collection(ITEM_COLLECTION).deleteOne({ id: itemId, ownerId: userId });
+}
