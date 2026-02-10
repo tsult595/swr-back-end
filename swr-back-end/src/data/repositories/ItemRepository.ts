@@ -36,5 +36,8 @@ export async function findItemsByOwnerId(ownerId: string): Promise<Item[]> {
 
 export async function deleteItem(itemId: number, userId: string): Promise<void> {
   const db = getDB();
-  await db.collection(ITEM_COLLECTION).deleteOne({ id: itemId, ownerId: userId });
+  await db.collection(ITEM_COLLECTION).updateOne(
+    { id: itemId, ownerId: userId },
+    { $set: { ownerId: null } }
+  );
 }

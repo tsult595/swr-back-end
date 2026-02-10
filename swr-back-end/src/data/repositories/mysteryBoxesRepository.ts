@@ -32,5 +32,8 @@ export async function buyMysteryBox(userId: string, boxId: number): Promise<void
 
 export async function deleteMysteryBox(boxId: number, userId: string): Promise<void> {
   const db = getDB();
-  await db.collection(MYSTERY_BOX_COLLECTION).deleteOne({ id: boxId, ownerId: userId });
+  await db.collection(MYSTERY_BOX_COLLECTION).updateOne(
+    { id: boxId, ownerId: userId },
+    { $set: { ownerId: null } }
+  );
 }
